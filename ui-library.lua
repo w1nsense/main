@@ -265,9 +265,9 @@ function Assets:Window(ScreenAsset,Window)
             )
         end
     end)
-    RunService.RenderStepped:Connect(function()
+    --[[RunService.RenderStepped:Connect(function()
         Window.RainbowHue = os.clock() % 10 / 10
-    end)
+    end)]]
 
     Window:GetPropertyChangedSignal("Enabled"):Connect(function(Enabled)
         WindowAsset.Visible = Enabled
