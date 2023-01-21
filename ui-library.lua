@@ -1500,7 +1500,7 @@ function Bracket:Window(Window)
     Window.Enabled = GetType(Window.Enabled,true,"boolean")
     Window.Blur = GetType(Window.Blur,false,"boolean")
 
-    Window.RainbowHue = 0
+    --Window.RainbowHue = 0
     Window.Colorable = {} Window.Elements = {} Window.Flags = {}
     local WindowAsset = Assets:Window(Bracket.ScreenAsset,Window)
 
