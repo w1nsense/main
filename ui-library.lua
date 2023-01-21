@@ -1,3 +1,4 @@
+
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local UserInputService = game:GetService("UserInputService")
 local InsertService = game:GetService("InsertService")
@@ -249,13 +250,13 @@ function Assets:Window(ScreenAsset,Window)
         Window.Size = Size
     end)
 
-    --[[local Month = tonumber(os.date("%m"))
+    local Month = tonumber(os.date("%m"))
     if Month == 12 or Month == 1 or Month == 2 then task.spawn(Assets.Snowflakes,WindowAsset) end
     WindowAsset.TabButtonContainer.ListLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
         WindowAsset.TabButtonContainer.CanvasSize = UDim2.new(
             0,WindowAsset.TabButtonContainer.ListLayout.AbsoluteContentSize.X,0,0
         )
-    end)]]
+    end)
 
     UserInputService.InputChanged:Connect(function(Input)
         if WindowAsset.Visible and Input.UserInputType == Enum.UserInputType.MouseMovement then
@@ -265,9 +266,9 @@ function Assets:Window(ScreenAsset,Window)
             )
         end
     end)
-    --[[RunService.RenderStepped:Connect(function()
+    RunService.RenderStepped:Connect(function()
         Window.RainbowHue = os.clock() % 10 / 10
-    end)]]
+    end)
 
     Window:GetPropertyChangedSignal("Enabled"):Connect(function(Enabled)
         WindowAsset.Visible = Enabled
@@ -1500,7 +1501,7 @@ function Bracket:Window(Window)
     Window.Enabled = GetType(Window.Enabled,true,"boolean")
     Window.Blur = GetType(Window.Blur,false,"boolean")
 
-    --Window.RainbowHue = 0
+    Window.RainbowHue = 0
     Window.Colorable = {} Window.Elements = {} Window.Flags = {}
     local WindowAsset = Assets:Window(Bracket.ScreenAsset,Window)
 
