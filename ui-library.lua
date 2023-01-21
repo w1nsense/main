@@ -250,13 +250,13 @@ function Assets:Window(ScreenAsset,Window)
         Window.Size = Size
     end)
 
-    local Month = tonumber(os.date("%m"))
+    --[[local Month = tonumber(os.date("%m"))
     if Month == 12 or Month == 1 or Month == 2 then task.spawn(Assets.Snowflakes,WindowAsset) end
     WindowAsset.TabButtonContainer.ListLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
         WindowAsset.TabButtonContainer.CanvasSize = UDim2.new(
             0,WindowAsset.TabButtonContainer.ListLayout.AbsoluteContentSize.X,0,0
         )
-    end)
+    end)]]
 
     UserInputService.InputChanged:Connect(function(Input)
         if WindowAsset.Visible and Input.UserInputType == Enum.UserInputType.MouseMovement then
@@ -495,7 +495,7 @@ function Assets:ToolTip(Parent,ScreenAsset,Text)
         ScreenAsset.ToolTip.Visible = false
     end)
 end
-function Assets.Snowflakes(WindowAsset)
+--[[function Assets.Snowflakes(WindowAsset)
     local ParticleEmitter = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/AlexR32/rParticle/master/Main.lua"))()
     local Emitter = ParticleEmitter.new(WindowAsset.Background,WindowAsset.Snowflake)
     local NewRandom = Random.new() Emitter.SpawnRate = 20
@@ -516,7 +516,8 @@ function Assets.Snowflakes(WindowAsset)
     Emitter.OnUpdate = function(Particle,Delta)
         Particle.Position += Particle.Velocity * Delta
     end
-end
+end]]
+
 function Assets:Divider(Parent,Divider)
     local DividerAsset = GetAsset("Divider/Divider")
 
