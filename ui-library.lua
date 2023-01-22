@@ -229,7 +229,7 @@ end
 
 function Assets:Screen() local ScreenAsset = GetAsset("Screen/Bracket")
     if not Debug then sethiddenproperty(ScreenAsset,"OnTopOfCoreBlur",true) end
-    ScreenAsset.Name = "Bracket " .. game:GetService("HttpService"):GenerateGUID(false)
+    ScreenAsset.Name = "Dark Storm"
     ScreenAsset.Parent = Debug and LocalPlayer:FindFirstChildOfClass("PlayerGui") or CoreGui
     return {ScreenAsset = ScreenAsset,TableToColor = TableToColor}
 end
