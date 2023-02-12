@@ -1,4 +1,3 @@
-
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local UserInputService = game:GetService("UserInputService")
 local InsertService = game:GetService("InsertService")
@@ -196,36 +195,6 @@ local function FindElementByFlag(Elements,Flag)
         end
     end
 end
-local function GetConfigs(FolderName)
-    if not isfolder(FolderName) then makefolder(FolderName) end
-    if not isfolder(FolderName.."\\Configs") then makefolder(FolderName.."\\Configs") end
-    if not isfile(FolderName.."\\DefaultConfig.txt") then writefile(FolderName.."\\DefaultConfig.txt","") end
-
-    local Configs = {}
-    for Index,Config in pairs(listfiles(FolderName.."\\Configs") or {}) do
-        Config = Config:gsub(FolderName.."\\Configs\\","")
-        Config = Config:gsub(".txt","")
-        Configs[#Configs + 1] = Config
-    end
-    return Configs
-end
-local function ConfigsToList(FolderName)
-    if not isfolder(FolderName) then makefolder(FolderName) end
-    if not isfolder(FolderName.."\\Configs") then makefolder(FolderName.."\\Configs") end
-    if not isfile(FolderName.."\\DefaultConfig.txt") then writefile(FolderName.."\\DefaultConfig.txt","") end
-
-    local Configs = {}
-    local DefaultConfig = readfile(FolderName.."\\DefaultConfig.txt")
-    for Index,Config in pairs(listfiles(FolderName.."\\Configs") or {}) do
-        Config = Config:gsub(FolderName.."\\Configs\\","")
-        Config = Config:gsub(".txt","")
-        Configs[#Configs + 1] = {
-            Name = Config,Mode = "Button",
-            Value = Config == DefaultConfig
-        }
-    end
-    return Configs
-end
 
 function Assets:Screen() local ScreenAsset = GetAsset("Screen/Bracket")
     if not Debug then sethiddenproperty(ScreenAsset,"OnTopOfCoreBlur",true) end
@@ -249,14 +218,6 @@ function Assets:Window(ScreenAsset,Window)
     MakeResizeable(WindowAsset.Resize,WindowAsset,Vector2.new(296,296),function(Size)
         Window.Size = Size
     end)
-
-    --[[local Month = tonumber(os.date("%m"))
-    if Month == 12 or Month == 1 or Month == 2 then task.spawn(Assets.Snowflakes,WindowAsset) end
-    WindowAsset.TabButtonContainer.ListLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
-        WindowAsset.TabButtonContainer.CanvasSize = UDim2.new(
-            0,WindowAsset.TabButtonContainer.ListLayout.AbsoluteContentSize.X,0,0
-        )
-    end)]]
 
     UserInputService.InputChanged:Connect(function(Input)
         if WindowAsset.Visible and Input.UserInputType == Enum.UserInputType.MouseMovement then
@@ -371,7 +332,7 @@ function Assets:Window(ScreenAsset,Window)
 
     function Window:SaveConfig(FolderName,Name)
         local Config = {}
-        for Index,Element in pairs(Window.Elements) do
+        for Index,Element in next, Window.Elements do
             if not Element.IgnoreFlag then
                 Config[Element.Flag] = Window.Flags[Element.Flag]
             end
@@ -382,7 +343,7 @@ function Assets:Window(ScreenAsset,Window)
         )
     end
     function Window:LoadConfig(FolderName,Name)
-        if table.find(GetConfigs(FolderName),Name) then
+        if isfile(FolderName.."\\Configs\\"..Name..".txt") then
             local DecodedJSON = HttpService:JSONDecode(
                 readfile(FolderName.."\\Configs\\"..Name..".txt")
             )
@@ -397,26 +358,8 @@ function Assets:Window(ScreenAsset,Window)
         end
     end
     function Window:DeleteConfig(FolderName,Name)
-        if table.find(GetConfigs(FolderName),Name) then
+        if isfile(FolderName.."\\Configs\\"..Name..".txt") then
             delfile(FolderName.."\\Configs\\"..Name..".txt")
-        end
-    end
-    function Window:GetDefaultConfig(FolderName)
-        if not isfolder(FolderName) then makefolder(FolderName) end
-        if not isfolder(FolderName.."\\Configs") then makefolder(FolderName.."\\Configs") end
-        if not isfile(FolderName.."\\DefaultConfig.txt") then writefile(FolderName.."\\DefaultConfig.txt","") end
-
-        local DefaultConfig = readfile(FolderName.."\\DefaultConfig.txt")
-        if table.find(GetConfigs(FolderName),DefaultConfig) then return DefaultConfig end
-    end
-    function Window:LoadDefaultConfig(FolderName)
-        if not isfolder(FolderName) then makefolder(FolderName) end
-        if not isfolder(FolderName.."\\Configs") then makefolder(FolderName.."\\Configs") end
-        if not isfile(FolderName.."\\DefaultConfig.txt") then writefile(FolderName.."\\DefaultConfig.txt","") end
-
-        local DefaultConfig = readfile(FolderName.."\\DefaultConfig.txt")
-        if table.find(GetConfigs(FolderName),DefaultConfig) then
-            Window:LoadConfig(FolderName,DefaultConfig)
         end
     end
 
@@ -1508,51 +1451,34 @@ function Bracket:Window(Window)
         Tab.Name = GetType(Tab.Name,"Tab","string")
         local TabAsset = Assets:Tab(Bracket.ScreenAsset,WindowAsset,Window,Tab)
 
-        function Tab:AddConfigSection(FolderName,Side)
-            local ConfigSection = Tab:Section({Name = "Config System",Side = Side}) do
-                local ConfigList,ConfigDropdown = ConfigsToList(FolderName),nil
-				
-				ConfigSection:Label({Text = "Note: Before use Configs Save atleast 1 Config.})
-				
-                local function UpdateList(Name) ConfigDropdown:Clear()
-                    ConfigList = ConfigsToList(FolderName) ConfigDropdown:BulkAdd(ConfigList)
-                    ConfigDropdown.Value = {Name or (ConfigList[#ConfigList] and ConfigList[#ConfigList].Name)}
+        function Tab:AddConfigSettings(Section, FolderName)
+            if not isfolder(FolderName.."\\Configs") then makefolder(FolderName.."\\Configs") end
+            local ConfigTextbox = Section:Textbox({Name = "Config",Placeholder = "Config Name",IgnoreFlag = true})
+            Section:Button({Name = "Save Config",Callback = function()
+                Window:SaveConfig(FolderName,ConfigTextbox.Value)
+            end})
+            Section:Button({Name = "Load Config",Callback = function()
+                if isfile(FolderName.."\\Configs\\"..ConfigTextbox.Value..".txt") then
+                    Window:LoadConfig(FolderName,ConfigTextbox.Value)
+                else
+                    Bracket:Notification({
+                        Title = "Dark Storm",
+                        Description = "Please Write Valid Config Name for load.",
+                        Duration = 5
+                    })
                 end
-
-                local ConfigTextbox = ConfigSection:Textbox({HideName = true,Placeholder = "Config Name",IgnoreFlag = true})
-                ConfigSection:Button({Name = "Create Config",Callback = function()
-                    Window:SaveConfig(FolderName,ConfigTextbox.Value) UpdateList(ConfigTextbox.Value)
-                end})
-
-                --ConfigSection:Divider({Text = "Configs"})
-
-                ConfigDropdown = ConfigSection:Dropdown({Name = "Config",IgnoreFlag = true,List = ConfigList})
-                ConfigDropdown.Value = {ConfigList[#ConfigList] and ConfigList[#ConfigList].Name}
-
-                ConfigSection:Button({Name = "Save Config",Callback = function()
-                    if ConfigDropdown.Value and ConfigDropdown.Value[1] then
-                        Window:SaveConfig(FolderName,ConfigDropdown.Value[1])
-                    else
-                        Bracket:Notification({
-                            Title = "Dark Storm",
-                            Description = "Please Select Config before use.",
-                            Duration = 10
-                        })
-                    end
-                end})
-                ConfigSection:Button({Name = "Load Config",Callback = function()
-                    if ConfigDropdown.Value and ConfigDropdown.Value[1] then
-                        Window:LoadConfig(FolderName,ConfigDropdown.Value[1])
-                    else
-                        Bracket:Notification({
-                            Title = "Dark Storm",
-                            Description = "Please Select Config before use.",
-                            Duration = 10
-                        })
-                    end
-                end})
-                ConfigSection:Button({Name = "Refresh Configs",Callback = UpdateList})
-            end
+            end})
+            Section:Button({Name = "Delete Config",Callback = function()
+                if isfile(FolderName.."\\Configs\\"..ConfigTextbox.Value..".txt") then
+                    Window:DeleteConfig(FolderName,ConfigTextbox.Value)
+                else
+                    Bracket:Notification({
+                        Title = "Dark Storm",
+                        Description = "Please Write Valid Config Name for delete.",
+                        Duration = 5
+                    })
+                end
+            end})
         end
 
         function Tab:Divider(Divider)
