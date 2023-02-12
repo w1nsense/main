@@ -204,7 +204,7 @@ local function GetConfigs(FolderName)
     local Configs = {}
     for Index,Config in pairs(listfiles(FolderName.."\\Configs") or {}) do
         Config = Config:gsub(FolderName.."\\Configs\\","")
-        Config = Config:gsub(".json","")
+        Config = Config:gsub(".txt","")
         Configs[#Configs + 1] = Config
     end
     return Configs
@@ -218,7 +218,7 @@ local function ConfigsToList(FolderName)
     local DefaultConfig = readfile(FolderName.."\\DefaultConfig.txt")
     for Index,Config in pairs(listfiles(FolderName.."\\Configs") or {}) do
         Config = Config:gsub(FolderName.."\\Configs\\","")
-        Config = Config:gsub(".json","")
+        Config = Config:gsub(".txt","")
         Configs[#Configs + 1] = {
             Name = Config,Mode = "Button",
             Value = Config == DefaultConfig
@@ -371,23 +371,20 @@ function Assets:Window(ScreenAsset,Window)
 
     function Window:SaveConfig(FolderName,Name)
         local Config = {}
-        --[[if table.find(GetConfigs(FolderName),Name) then
-            Config = HttpService:JSONDecode(readfile(FolderName.."\\Configs\\"..Name..".json"))
-        end]]
         for Index,Element in pairs(Window.Elements) do
             if not Element.IgnoreFlag then
                 Config[Element.Flag] = Window.Flags[Element.Flag]
             end
         end
         writefile(
-            FolderName.."\\Configs\\"..Name..".json",
+            FolderName.."\\Configs\\"..Name..".txt",
             HttpService:JSONEncode(Config)
         )
     end
     function Window:LoadConfig(FolderName,Name)
         if table.find(GetConfigs(FolderName),Name) then
             local DecodedJSON = HttpService:JSONDecode(
-                readfile(FolderName.."\\Configs\\"..Name..".json")
+                readfile(FolderName.."\\Configs\\"..Name..".txt")
             )
             for Flag,Value in pairs(DecodedJSON) do
                 local Element = FindElementByFlag(Window.Elements,Flag)
@@ -401,7 +398,7 @@ function Assets:Window(ScreenAsset,Window)
     end
     function Window:DeleteConfig(FolderName,Name)
         if table.find(GetConfigs(FolderName),Name) then
-            delfile(FolderName.."\\Configs\\"..Name..".json")
+            delfile(FolderName.."\\Configs\\"..Name..".txt")
         end
     end
     function Window:GetDefaultConfig(FolderName)
@@ -1514,14 +1511,16 @@ function Bracket:Window(Window)
         function Tab:AddConfigSection(FolderName,Side)
             local ConfigSection = Tab:Section({Name = "Config System",Side = Side}) do
                 local ConfigList,ConfigDropdown = ConfigsToList(FolderName),nil
-
+				
+				ConfigSection:Label({Text = "Note: Before use Configs Save atleast 1 Config.})
+				
                 local function UpdateList(Name) ConfigDropdown:Clear()
                     ConfigList = ConfigsToList(FolderName) ConfigDropdown:BulkAdd(ConfigList)
                     ConfigDropdown.Value = {Name or (ConfigList[#ConfigList] and ConfigList[#ConfigList].Name)}
                 end
 
                 local ConfigTextbox = ConfigSection:Textbox({HideName = true,Placeholder = "Config Name",IgnoreFlag = true})
-                ConfigSection:Button({Name = "Create",Callback = function()
+                ConfigSection:Button({Name = "Create Config",Callback = function()
                     Window:SaveConfig(FolderName,ConfigTextbox.Value) UpdateList(ConfigTextbox.Value)
                 end})
 
@@ -1530,61 +1529,29 @@ function Bracket:Window(Window)
                 ConfigDropdown = ConfigSection:Dropdown({HideName = true,IgnoreFlag = true,List = ConfigList})
                 ConfigDropdown.Value = {ConfigList[#ConfigList] and ConfigList[#ConfigList].Name}
 
-                ConfigSection:Button({Name = "Save",Callback = function()
+                ConfigSection:Button({Name = "Save Config",Callback = function()
                     if ConfigDropdown.Value and ConfigDropdown.Value[1] then
                         Window:SaveConfig(FolderName,ConfigDropdown.Value[1])
                     else
                         Bracket:Notification({
-                            Title = "Config System",
-                            Description = "First Select Config",
+                            Title = "Dark Storm",
+                            Description = "Please Select Config before use.",
                             Duration = 10
                         })
                     end
                 end})
-                ConfigSection:Button({Name = "Load",Callback = function()
+                ConfigSection:Button({Name = "Load Config",Callback = function()
                     if ConfigDropdown.Value and ConfigDropdown.Value[1] then
                         Window:LoadConfig(FolderName,ConfigDropdown.Value[1])
                     else
                         Bracket:Notification({
-                            Title = "Config System",
-                            Description = "First Select Config",
+                            Title = "Dark Storm",
+                            Description = "Please Select Config before use.",
                             Duration = 10
                         })
                     end
                 end})
-                ConfigSection:Button({Name = "Delete",Callback = function()
-                    if ConfigDropdown.Value and ConfigDropdown.Value[1] then
-                        Window:DeleteConfig(FolderName,ConfigDropdown.Value[1])
-                        UpdateList()
-                    else
-                        Bracket:Notification({
-                            Title = "Config System",
-                            Description = "First Select Config",
-                            Duration = 10
-                        })
-                    end
-                end})
-                ConfigSection:Button({Name = "Refresh",Callback = UpdateList})
-
-                local DefaultConfig = Window:GetDefaultConfig(FolderName)
-                local ConfigDivider = ConfigSection:Divider({Text = not DefaultConfig and "Default Config"
-                or "Default Config\n<font color=\"rgb(189,189,189)\">[ "..DefaultConfig.." ]</font>"})
-
-                ConfigSection:Button({Name = "Set Default Config",Callback = function()
-                    if ConfigDropdown.Value and ConfigDropdown.Value[1] then
-                        DefaultConfig = ConfigDropdown.Value[1] writefile(FolderName.."\\DefaultConfig.txt",DefaultConfig)
-                        ConfigDivider.Text = "Default Config\n<font color=\"rgb(189,189,189)\">[ "..DefaultConfig.." ]</font>"
-                    else
-                        Bracket:Notification({
-                            Title = "Config System",
-                            Description = "First Select Config",
-                            Duration = 10
-                        })
-                    end
-                end})
-                ConfigSection:Button({Name = "Clear Default Config",Callback = function()
-                    writefile(FolderName.."\\DefaultConfig.txt","") ConfigDivider.Text = "Default Config"
-                end})
+                ConfigSection:Button({Name = "Refresh Configs",Callback = UpdateList})
             end
         end
 
