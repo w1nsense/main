@@ -1524,9 +1524,9 @@ function Bracket:Window(Window)
                     Window:SaveConfig(FolderName,ConfigTextbox.Value) UpdateList(ConfigTextbox.Value)
                 end})
 
-                ConfigSection:Divider({Text = "Configs"})
+                --ConfigSection:Divider({Text = "Configs"})
 
-                ConfigDropdown = ConfigSection:Dropdown({HideName = true,IgnoreFlag = true,List = ConfigList})
+                ConfigDropdown = ConfigSection:Dropdown({Name = "Config",IgnoreFlag = true,List = ConfigList})
                 ConfigDropdown.Value = {ConfigList[#ConfigList] and ConfigList[#ConfigList].Name}
 
                 ConfigSection:Button({Name = "Save Config",Callback = function()
