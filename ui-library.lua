@@ -350,6 +350,7 @@ function Assets:Window(ScreenAsset,Window)
             for Flag,Value in pairs(DecodedJSON) do
                 local Element = FindElementByFlag(Window.Elements,Flag)
                 if Element ~= nil then Element.Value = Value end
+		task.wait()
             end
             --[[for Index,Element in pairs(Window.Elements) do
                 local Value = DecodedJSON[Element.Flag]
