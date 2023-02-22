@@ -347,8 +347,7 @@ function Assets:Window(ScreenAsset,Window)
             local DecodedJSON = HttpService:JSONDecode(
                 readfile(FolderName.."\\Configs\\"..Name..".txt")
             )
-            for Flag,Value in pairs(DecodedJSON) do
-		task.wait(0)
+            for Flag,Value in next, DecodedJSON do
                 local Element = FindElementByFlag(Window.Elements,Flag)
                 if Element ~= nil then Element.Value = Value end
             end
