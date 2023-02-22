@@ -332,7 +332,7 @@ function Assets:Window(ScreenAsset,Window)
 
     function Window:SaveConfig(FolderName,Name)
         local Config = {}
-        for Index,Element in next, Window.Elements do
+        for Index,Element in pairs(Window.Elements) do
             if not Element.IgnoreFlag then
                 Config[Element.Flag] = Window.Flags[Element.Flag]
             end
@@ -348,9 +348,9 @@ function Assets:Window(ScreenAsset,Window)
                 readfile(FolderName.."\\Configs\\"..Name..".txt")
             )
             for Flag,Value in pairs(DecodedJSON) do
+		task.wait(0)
                 local Element = FindElementByFlag(Window.Elements,Flag)
                 if Element ~= nil then Element.Value = Value end
-		task.wait()
             end
             --[[for Index,Element in pairs(Window.Elements) do
                 local Value = DecodedJSON[Element.Flag]
