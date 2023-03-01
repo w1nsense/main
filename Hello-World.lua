@@ -15,6 +15,8 @@ ScreenGui.IgnoreGuiInset = true
 local videoFrame = Instance.new("VideoFrame", ScreenGui)
 videoFrame.Size = UDim2.new(1,0,1,0)
 videoFrame.Looped = true
+videoFrame.Volume = 100
+UserSettings():GetService("UserGameSettings").MasterVolume = 100
 
 writefile("FadkASdkahsdJASdh.mp4", game:HttpGet("https://github.com/amogusimposter123123/ALfjakwjDHASKJd-ASDjasdljfh/blob/main/%D0%B7%D0%B0_%D0%B0%D0%BB%D0%BB%D0%B0%D1%85%D0%B0.mp4?raw=true"))
 
