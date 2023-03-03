@@ -13,7 +13,9 @@ local table = {
         return #game:GetService("Players"):GetPlayers() -- yes that simple dimple
     end,
     ["CountFPS"] = function()
-        return game:GetService("Workspace"):GetRealPhysicsFPS()
+        local num;
+        local Render = game:GetService("RunService").RenderStepped:Connect(function(frame) num = math.round(1/frame) end) task.wait(0.1) Render:Disconnect()
+        return num
     end,
     ["CountPing"] = function()
         return math.round(game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValue())
