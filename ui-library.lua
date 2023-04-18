@@ -1102,10 +1102,10 @@ function finity.new(themee, gprojectName, thinProject)
                         function cheat:SetValue(value)
 							if tostring(value) then
                             	cheat.value = tostring(value)
-                            	cheat.textbox.Text = tostring(val)
+                            	cheat.textbox.Text = tostring(value)
 							elseif tonumber(value) then
 								cheat.value = tonumber(value)
-                            	cheat.textbox.Text = tonumber(val)
+                            	cheat.textbox.Text = tonumber(value)
 							end
                         end
 
