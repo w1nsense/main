@@ -1100,8 +1100,13 @@ function finity.new(themee, gprojectName, thinProject)
                             end
                         end)
                         function cheat:SetValue(value)
-                            cheat.value = tostring(value)
-                            cheat.textbox.Text = tostring(val)
+							if tostring(value) then
+                            	cheat.value = tostring(value)
+                            	cheat.textbox.Text = tostring(val)
+							elseif tonumber(value) then
+								cheat.value = tonumber(value)
+                            	cheat.textbox.Text = tonumber(val)
+							end
                         end
 
 						function cheat:GetValue()
