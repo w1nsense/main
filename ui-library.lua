@@ -993,6 +993,7 @@ function finity.new(themee, gprojectName, thinProject)
 					elseif string.lower(kind) == "textbox" then
 						cheat.value = ""
 						local placeholdertext = data and data.placeholder
+						
 						if data.ConfigElement and data.ConfigElement then
 							cheat.background = finity:Create("ImageLabel", {
 								Name = "Background",
@@ -1100,13 +1101,8 @@ function finity.new(themee, gprojectName, thinProject)
                             end
                         end)
                         function cheat:SetValue(value)
-							if tostring(value) then
-                            	cheat.value = tostring(value)
-                            	cheat.textbox.Text = tostring(value)
-							elseif tonumber(value) then
-								cheat.value = tonumber(value)
-                            	cheat.textbox.Text = tonumber(value)
-							end
+				cheat.value = value
+				cheat.textbox.Text = value
                         end
 
 						function cheat:GetValue()
