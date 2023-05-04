@@ -991,8 +991,8 @@ function finity.new(themee, gprojectName, thinProject)
 						cheat.dropdown.Parent = cheat.container
 						cheat.list.Parent = cheat.container
 					elseif string.lower(kind) == "textbox" then
+						cheat.value = ""
 						local placeholdertext = data and data.placeholder
-						
 						if data.ConfigElement and data.ConfigElement then
 							cheat.background = finity:Create("ImageLabel", {
 								Name = "Background",
