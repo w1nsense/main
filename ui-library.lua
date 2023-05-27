@@ -157,7 +157,7 @@ function finity.new(themee, gprojectName, thinProject)
 			finityData.UpConnection:Disconnect()
 		end
 
-		finityData.UpConnection = finity.gs["UserInputService"].InputEnded:Connect(function(Input)
+		finityData.UpConnection = finity.gs["UserInputService"].InputEnded:Connect(function(Input, typing)
 			if Input.KeyCode == finityData.ToggleKey and not typing then
                 toggled = not toggled
 
@@ -185,7 +185,7 @@ function finity.new(themee, gprojectName, thinProject)
 		end
 	end
 
-	finityData.UpConnection = finity.gs["UserInputService"].InputEnded:Connect(function(Input)
+	finityData.UpConnection = finity.gs["UserInputService"].InputEnded:Connect(function(Input, typing)
 		if Input.KeyCode == finityData.ToggleKey and not typing then
 			toggled = not toggled
 
