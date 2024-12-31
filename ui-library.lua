@@ -179,9 +179,9 @@ function finity.new(themee, gprojectName, thinProject)
 		self2.BackgroundImage.Image = ImageID
 		
 		if Transparency then
-			self2.container.ImageTransparency = Transparency
+			self2.BackgroundImage.ImageTransparency = Transparency
 		else
-			self2.container.ImageTransparency = 0.8
+			self2.BackgroundImage.ImageTransparency = 0.8
 		end
 	end
 
