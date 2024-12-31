@@ -212,7 +212,7 @@ function finity.new(themee, gprojectName, thinProject)
 		BackgroundColor3 = theme.main_container,
 		BorderSizePixel = 0,
 		Position = UDim2.new(0.5, 0, 0.5, 0),
-		Size = UDim2.new(0, 950, 0, 510),
+		Size = UDim2.new(0, 700, 0, 500),
 		ZIndex = 2,
 		ImageTransparency = 1
     })
