@@ -176,7 +176,7 @@ function finity.new(themee, gprojectName, thinProject)
 	end
 	
 	self2.ChangeBackgroundImage = function(ImageID, Transparency)
-		self2.container.Image = ImageID
+		self2.BackgroundImage.Image = ImageID
 		
 		if Transparency then
 			self2.container.ImageTransparency = Transparency
@@ -203,7 +203,7 @@ function finity.new(themee, gprojectName, thinProject)
 		ResetOnSpawn = false,
 	})
 
-	self2.container = self:Create("ImageLabel", {
+	self2.container = self:Create("Frame", {
 		Draggable = true,
 		Active = true,
 		Name = "Container",
@@ -216,6 +216,19 @@ function finity.new(themee, gprojectName, thinProject)
 		ZIndex = 2,
 		ImageTransparency = 1
     })
+
+	self2.BackgroundImage = self:Create("ImageLabel", {
+		Name = "BackgroundImage",
+		AnchorPoint = Vector2.new(0.5, 0.5),
+		BackgroundTransparency = 1,
+		BorderSizePixel = 0,
+		Position = UDim2.new(0.5, 0, 0.532, 0),
+		Size = UDim2.new(1, 0, 0.936, 0),
+		ZIndex = 2,
+		ImageTransparency = 0.8,
+	})
+
+	self2.BackgroundImage.Parent = self2.container
     
     self2.modal = self:Create("TextButton", {
         Text = "";
@@ -226,9 +239,6 @@ function finity.new(themee, gprojectName, thinProject)
 	if thinProject and typeof(thinProject) == "UDim2" then
 		self2.container.Size = thinProject
 	end
-
-	self2.container.Draggable = true
-	self2.container.Active = true
 
 	self2.sidebar = self:Create("Frame", {
 		Name = "Sidebar",
@@ -545,10 +555,6 @@ function finity.new(themee, gprojectName, thinProject)
 					TextXAlignment = Enum.TextXAlignment.Left
 				})
 
-				function cheat:SetText(Text)
-					cheat.label.Text = Text
-				end
-
 				cheat.container	= finity:Create("Frame", {
 					Name = "Container",
 					AnchorPoint = Vector2.new(1, 0.5),
@@ -558,6 +564,10 @@ function finity.new(themee, gprojectName, thinProject)
 					Size = UDim2.new(0, 150, 0, 22),
 					ZIndex = 2,
 				})
+
+				function cheat:SetText(Text)
+					cheat.label.Text = Text
+				end
 				
 				if kind then
 					if string.lower(kind) == "checkbox" or string.lower(kind) == "toggle" then
@@ -1101,8 +1111,8 @@ function finity.new(themee, gprojectName, thinProject)
                             end
                         end)
                         function cheat:SetValue(value)
-				cheat.value = value
-				cheat.textbox.Text = value
+							cheat.value = value
+							cheat.textbox.Text = value
                         end
 
 						function cheat:GetValue()
