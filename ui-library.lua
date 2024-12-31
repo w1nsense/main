@@ -222,7 +222,8 @@ function finity.new(themee, gprojectName, thinProject)
 		Position = UDim2.new(0.5, 0, 0.532, 0),
 		Size = UDim2.new(1, 0, 0.936, 0),
 		ZIndex = 2,
-		ImageTransparency = 0.8
+		ImageTransparency = 0.8,
+		ScaleType = Enum.ScaleType.Tile
 	})
 
 	self2.BackgroundImage.Parent = self2.container
@@ -1119,8 +1120,10 @@ function finity.new(themee, gprojectName, thinProject)
 							return cheat.value
 						end
 
+						cheat.container.Size = UDim2.new(0, 120, 0, 22)
 						cheat.background.Parent = cheat.container
 						cheat.textbox.Parent = cheat.container
+
 					elseif string.lower(kind) == "slider" then
 						cheat.value = 0
 
@@ -1401,7 +1404,8 @@ function finity.new(themee, gprojectName, thinProject)
 								if not s then warn("error: ".. e) end
 							end
                         end
-
+						
+						cheat.container.Size = UDim2.new(0, 120, 0, 22)
 						cheat.background.Parent = cheat.container
 						cheat.button.Parent = cheat.container
 					
@@ -1564,6 +1568,7 @@ function finity.new(themee, gprojectName, thinProject)
 							cheat.button.Text = tostring(callback_bind.Name)
 						end
 
+						cheat.container.Size = UDim2.new(0, 120, 0, 22)
 						cheat.background.Parent = cheat.container
 						cheat.button.Parent = cheat.container
 					end
