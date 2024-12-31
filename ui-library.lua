@@ -520,7 +520,7 @@ function finity.new(themee, gprojectName, thinProject)
 			uilistlayout.Parent = sector.container
 			uilistlayout = nil
 
-			function sector:DarkStorm(kind, name, callback, data)
+			function sector:WH(kind, name, callback, data)
 				local cheat = {}
 				cheat.value = nil
 
