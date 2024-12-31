@@ -204,8 +204,6 @@ function finity.new(themee, gprojectName, thinProject)
 	})
 
 	self2.container = self:Create("Frame", {
-		Draggable = true,
-		Active = true,
 		Name = "Container",
 		AnchorPoint = Vector2.new(0.5, 0.55),
 		BackgroundTransparency = 0,
@@ -224,7 +222,7 @@ function finity.new(themee, gprojectName, thinProject)
 		Position = UDim2.new(0.5, 0, 0.532, 0),
 		Size = UDim2.new(1, 0, 0.936, 0),
 		ZIndex = 2,
-		ImageTransparency = 0.8,
+		ImageTransparency = 0.8
 	})
 
 	self2.BackgroundImage.Parent = self2.container
@@ -238,6 +236,9 @@ function finity.new(themee, gprojectName, thinProject)
 	if thinProject and typeof(thinProject) == "UDim2" then
 		self2.container.Size = thinProject
 	end
+
+	self2.container.Draggable = true
+	self2.container.Active = true
 
 	self2.sidebar = self:Create("Frame", {
 		Name = "Sidebar",
