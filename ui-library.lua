@@ -877,7 +877,7 @@ function finity.new(themee, gprojectName, thinProject)
 						uipadding.Parent = cheat.list
 						uipadding = nil
 						
-						local function refreshOptions()
+						function cheat.refreshOptions()
 							if cheat.dropped then
 								cheat.fadelist()
 							end	
@@ -971,20 +971,20 @@ function finity.new(themee, gprojectName, thinProject)
 							cheat.fadelist()
 						end)
 
-						refreshOptions()
+						cheat.refreshOptions()
 
 						if data.playerlist and data.playerlist then
 							for i,v in pairs(game:GetService("Players"):GetPlayers()) do
 								table.insert(options, v.Name)
-								refreshOptions()
+								cheat.refreshOptions()
 							end
 							game:GetService("Players").PlayerAdded:Connect(function(Player)
 								table.insert(options, Player.Name)
-								refreshOptions()
+								cheat.refreshOptions()
 							end)
 							game:GetService("Players").PlayerRemoving:Connect(function(Player)
 								table.remove(options, table.find(options, Player.Name))
-								refreshOptions()
+								cheat.refreshOptions()
 							end)
 						end
 
