@@ -185,14 +185,25 @@ function finity.new(themee, gprojectName, thinProject)
 		end
 	end
 
+	self2.ChangeToggleButton = function(Type, Arg)
+		if Type == "Image" then
+			self2.ToggleButton.Image = Arg
+		end
+		if Type == "Visible" then
+			self2.ToggleButton.Visible = Arg
+		end
+	end
+
 	finityData.UpConnection = finity.gs["UserInputService"].InputEnded:Connect(function(Input, typing)
 		if Input.KeyCode == finityData.ToggleKey and not typing then
 			toggled = not toggled
 
 			if toggled then
-				self2.container:TweenPosition(UDim2.new(0.5, 0, 0.5, 0), "Out", "Sine", 0.5, true)
+				self2.container.Visible = true
+				--self2.container:TweenPosition(UDim2.new(0.5, 0, 0.5, 0), "Out", "Sine", 0.5, true)
 			else
-				self2.container:TweenPosition(UDim2.new(0.5, 0, 1.5, 0), "Out", "Sine", 0.5, true)
+				self2.container.Visible = false
+				--self2.container:TweenPosition(UDim2.new(0.5, 0, 1.5, 0), "Out", "Sine", 0.5, true)
 			end
 		end
 	end)
@@ -202,6 +213,22 @@ function finity.new(themee, gprojectName, thinProject)
 		ZIndexBehavior = Enum.ZIndexBehavior.Global,
 		ResetOnSpawn = false,
 	})
+
+	self2.ToggleButton = self:Create("ImageButton", {
+		Name = "ToggleButton",
+		Image = "rbxassetid://12535312655",
+		ImageTransparency = 0.2,
+		ScaleType = Enum.ScaleType.Fit,
+		BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+		BackgroundTransparency = 1,
+		Position = UDim2.new(0.477047354, 0, 0, 0),
+		Size = UDim2.new(0.059, 0, 0.097, 0),
+		Visible = false
+	})
+	self2.ToggleButton.Parent = self2.userinterface;
+	self2.ToggleButton.MouseButton1Up:Connect(function()
+		self2.container.Visible = not self2.container.Visible
+    end)
 
 	self2.container = self:Create("Frame", {
 		Name = "Container",
